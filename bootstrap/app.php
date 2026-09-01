@@ -44,6 +44,21 @@ $app->singleton(
 // Pastikan folder /tmp digunakan untuk view cache dan compiled files di Vercel
 if (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
     $app->useStoragePath('/tmp/storage');
+    
+    // Pastikan folder-folder esensial ini otomatis dibuat di /tmp
+    $paths = [
+        '/tmp/storage/app',
+        '/tmp/storage/framework/cache',
+        '/tmp/storage/framework/sessions',
+        '/tmp/storage/framework/views',
+        '/tmp/storage/logs',
+    ];
+    
+    foreach ($paths as $path) {
+        if (!is_dir($path)) {
+            mkdir($path, 0755, true);
+        }
+    }
 }
 
 /*
