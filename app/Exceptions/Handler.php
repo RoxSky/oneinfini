@@ -27,4 +27,19 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $e)
+{
+    // Paksa tampilkan pesan error mentah agar tidak mencari class [view]
+    if (app()->bound('Illuminate\Contracts\Debug\ExceptionHandler')) {
+        // Jika bukan mode production atau ingin debug cepat
+        return parent::render($request, $e);
+    }
+    
+    return response()->json([
+        'error' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine()
+    ], 500);
+}
 }
