@@ -27,12 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // develop menggunakan ngrok (sudah limit)
-        //     if (app()->environment('local')) {
-        //         URL::forceScheme('https');
-        //     }
-        //     DB::listen(function ($query) {
-        //         Log::info("SQL: {$query->sql} [".implode(', ', $query->bindings)."] Time: {$query->time} ms");
-        //     });
+        // Paksa semua URL (termasuk form action) menggunakan HTTPS di Vercel
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
