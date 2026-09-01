@@ -3,6 +3,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
+// Paksa semua request masuk dianggap HTTPS di Vercel
+$_SERVER['HTTPS'] = 'on';
+$_SERVER['SERVER_PORT'] = 443;
+$_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+
 define('LARAVEL_START', microtime(true));
 
 // Siapkan folder /tmp yang memiliki akses tulis di Vercel
