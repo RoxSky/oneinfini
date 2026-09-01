@@ -23,23 +23,16 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        // Kosongkan agar tidak memicu view error handler bawaan framework
     }
 
     public function render($request, Throwable $e)
-{
-    // Paksa tampilkan pesan error mentah agar tidak mencari class [view]
-    if (app()->bound('Illuminate\Contracts\Debug\ExceptionHandler')) {
-        // Jika bukan mode production atau ingin debug cepat
-        return parent::render($request, $e);
+    {
+        // Langsung lempar pesan error mentah dalam bentuk JSON/Teks
+        return response()->json([
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ], 500);
     }
-    
-    return response()->json([
-        'error' => $e->getMessage(),
-        'file' => $e->getFile(),
-        'line' => $e->getLine()
-    ], 500);
-}
 }
