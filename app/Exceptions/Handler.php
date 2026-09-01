@@ -28,11 +28,15 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        // Langsung lempar pesan error mentah dalam bentuk JSON/Teks
-        return response()->json([
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine()
-        ], 500);
+        // Gunakan PHP Native murni, jangan gunakan fungsi Laravel sama sekali
+        http_response_code(500);
+        header('Content-Type: application/json');
+        
+        echo json_encode([
+            'TANGKAP_ERROR_ASLI' => $e->getMessage(),
+            'DI_FILE' => $e->getFile(),
+            'PADA_BARIS' => $e->getLine()
+        ]);
+        exit; // Matikan eksekusi script paksa di sini
     }
 }
